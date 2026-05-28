@@ -10,5 +10,11 @@
     "url": "5.swf",
     "thumbnail": "5.png",
     "tags": ["cooking"]
+  },
+  {
+    "name": "비비빅-핫케이크",
+    "url": "3.swf",
+    "thumbnail": "3.png",
+    "tags": ["cooking"]
   }
 ]
