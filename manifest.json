@@ -16,5 +16,11 @@
     "url": "3.swf",
     "thumbnail": "3.png",
     "tags": ["cooking"]
-  }
+  },
+  {
+    "name": "MahJong_2",
+    "url": "2.swf",
+    "thumbnail": "2.png",
+    "tags": ["table"]
+  },
 ]
