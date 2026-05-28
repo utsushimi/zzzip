@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>zzzip</title>
+<link rel="icon" type="image/x-icon" href="https://64.media.tumblr.com/a404105fb71eb8ea9d2c618a5d1bebdb/2a82d14d0f12a044-38/s75x75_c1/d56b2d7da4ae150ed27ba4224737b3becfbeff84.gifv">
+<style>
+* { box-sizing: border-box; }
+body {
+  background: radial-gradient(circle at top left, #fffafc 0, #fdeef3 45%, #fff8f1 100%);
+  color: #6c505a;
+  font-family: Tahoma, Verdana, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px;
+}
+.shell { margin: 0 auto; max-width: 900px; }
+header {
+  background: rgba(255, 252, 252, 0.96);
+  border: 2px solid #efc7d1;
+  box-shadow: 4px 4px 0 #f7dfe5;
+  margin-bottom: 16px;
+  padding: 14px;
+}
+h1 { color: #b87386; font-size: 22px; margin: 0; text-shadow: 2px 2px 0 #fff2f5; }
+p { color: #8a6d75; font-size: 12px; line-height: 1.5; margin: 7px 0 0; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.card {
+  background: rgba(255, 252, 252, 0.96);
+  border: 2px solid #efc7d1;
+  box-shadow: 4px 4px 0 #f7dfe5;
+  color: #6c505a;
+  display: block;
+  padding: 9px;
+  text-decoration: none;
+}
+.card:hover { background: #fdebf1; transform: translate(1px, 1px); box-shadow: 3px 3px 0 #f7dfe5; }
+.thumb {
+  aspect-ratio: 4 / 3;
+  background: #fff7f8;
+  border: 1px solid #efc7d1;
+  display: grid;
+  margin-bottom: 8px;
+  overflow: hidden;
+  place-items: center;
+}
+.thumb img { height: 100%; object-fit: cover; width: 100%; }
+.thumb span { color: #b87386; font-size: 28px; }
+.name { color: #8f5f6d; font-size: 13px; font-weight: bold; }
+.url { color: #8a6d75; font-size: 10px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.tag { background: #fff7f8; border: 1px solid #efc7d1; color: #8a6d75; font-size: 10px; padding: 2px 5px; }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <h1>zzzip</h1>
+    <p>SWF files for Flash Pocket. Click a card to open the raw file, or import this page's manifest from the player.</p>
+  </header>
+  <section class="grid" id="grid"></section>
+</main>
+<script>
+fetch('manifest.json', { cache: 'no-store' })
+  .then(function(response) { return response.json(); })
+  .then(function(games) {
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    games.forEach(function(game) {
+      var url = new URL(game.url, location.href).href;
+      var thumb = game.thumbnail ? new URL(game.thumbnail, location.href).href : '';
+      var tags = Array.isArray(game.tags) ? game.tags : [];
+      var card = document.createElement('a');
+      card.className = 'card';
+      card.href = url;
+      card.innerHTML = '<div class="thumb">' + (thumb ? '<img src="' + escapeHtml(thumb) + '" alt="">' : '<span>swf</span>') + '</div><div class="name">' + escapeHtml(game.name || url.split('/').pop()) + '</div><div class="url">' + escapeHtml(url) + '</div><div class="tags">' + tags.map(function(tag) { return '<span class="tag">' + escapeHtml(tag) + '</span>'; }).join('') + '</div>';
+      grid.appendChild(card);
+    });
+  });
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, function(char) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+  });
+}
+</script>
+</body>
+</html>
